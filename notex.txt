@@ -1,0 +1,4 @@
+https://www.youtube.com/watch?v=PEMfsqZ2-As
+role  base: https://www.youtube.com/watch?v=urZ0iMugiiI
+role base github: https://github.com/HamedBahram/next-auth-demo/blob/role-based-auth/app/api/auth/%5B...nextauth%5D/route.js
+role office : https://github.com/nextauthjs/next-auth/blob/main/apps/examples/nextjs/middleware.ts

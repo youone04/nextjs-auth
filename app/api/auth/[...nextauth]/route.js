@@ -11,31 +11,52 @@ export const authOptions = {
       credentials: {},
 
       async authorize(credentials) {
-        const { email, password } = credentials;
+        const { email, password, token } = credentials;
 
         try {
-          await connectMongoDB();
-          const user = await User.findOne({ email });
-
-          if (!user) {
+          const user =  await fetch('https://dummyjson.com/auth/login',{
+            method: "POST",
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              username: 'kminchelle',
+              password: '0lelplR',
+            })
+          })
+          const data = await user.json()
+          // console.log("user", data)
+          if (data?.message === 'Invalid credentials') {
             return null;
           }
-
-          const passwordsMatch = await bcrypt.compare(password, user.password);
-
-          if (!passwordsMatch) {
-            return null;
-          }
-
-          return user;
+        data.name = data.username
+        data.userRole = 'user'
+        return data
         } catch (error) {
           console.log("Error: ", error);
         }
       },
     }),
   ],
+  callbacks: {
+    async jwt({ token, user, trigger, session }) {
+      // console.log('calbacks',user)
+      // token.userRole = user.userRole
+      if (user) {
+        token.userRole = user.userRole
+        token.jwtToken = user.token
+      }
+      // token.jwtToken = user?.token
+      return token
+    },
+    async session({ session, token }) {
+      // console.log("token session", token)
+      session.user.userRole = token.userRole
+      session.user.jwtToken = token.jwtToken
+      return session
+    },
+  },
   session: {
     strategy: "jwt",
+    maxAge: 7200, // 2 hours
   },
   secret: process.env.NEXTAUTH_SECRET,
   pages: {
@@ -46,3 +67,4 @@ export const authOptions = {
 const handler = NextAuth(authOptions);
 
 export { handler as GET, handler as POST };
+

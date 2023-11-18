@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 export default function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [token, setToken] = useState("");
   const [error, setError] = useState("");
 
   const router = useRouter();
@@ -19,8 +20,11 @@ export default function LoginForm() {
       const res = await signIn("credentials", {
         email,
         password,
+        token,
         redirect: false,
       });
+
+      // console.log(res)
 
       if (res.error) {
         setError("Invalid Credentials");
@@ -59,7 +63,7 @@ export default function LoginForm() {
           )}
 
           <Link className="text-sm mt-3 text-right" href={"/register"}>
-            Don't have an account? <span className="underline">Register</span>
+            Dont have an account? <span className="underline">Register</span>
           </Link>
         </form>
       </div>

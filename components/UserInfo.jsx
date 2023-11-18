@@ -5,6 +5,7 @@ import { useSession } from "next-auth/react";
 
 export default function UserInfo() {
   const { data: session } = useSession();
+  console.log(useSession())
 
   return (
     <div className="grid place-items-center h-screen">
